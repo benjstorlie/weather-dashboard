@@ -11,6 +11,7 @@ const queryString=document.location.search;
 init();
 
 function init() {
+  displayIcon()
   cityInputFormEl.submit(handleCityFormSubmit);
   displayWeather();
 }
@@ -127,6 +128,10 @@ function displayWeatherData(data) {
   console.log(data);
 }
 
+function displayIcon() {
+  // Set the size of the Weather Icon in the header to the font-size of the header
+  $("#weather-icon").css("width",$("h1").css("line-height"));
+}
 
 //$.ajax({
 //  url: "/api/getWeather",
