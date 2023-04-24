@@ -8,7 +8,6 @@
   <!-- Favicon 🌤 #ffed3b #4a3bff-->
   <link rel="icon" type="image/x-icon" sizes="16x16 " href="./assets/images/favicon/weather-favicon-16x16.ico">
   <link rel="icon" type="image/x-icon" sizes="32x32 " href="./assets/images/favicon/weather-favicon-32x32.ico">
-
   <meta name="Description" content="Weather Dashboard" />
   
   <!-- Link to Bootstrap's CDN -->
@@ -17,10 +16,13 @@
   <link
   rel="stylesheet"
   href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
-  />
+/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./assets/css/style.css">
+  
   <title>Weather Dashboard</title>
 </head>
+  <script src="https://kit.fontawesome.com/ec0ce3da7e.js" crossorigin="anonymous"></script>
 <body>
   <header id="header-box" class="container-fluid py-3 text-center font-weight-bold">
     <div class="row justify-content-end"><div class="col-12 col-md-9">
@@ -33,7 +35,7 @@
         <form id="city-input-form">
           <label for="city-input" class="h2 mb-3" >Search for a City:</label>
           <!--<input>-->
-          <input type="text" id="city-input" class="form-control w-100 mb-3" placeholder="Sacramento" value="Sacramento">
+          <input type="text" id="city-input" class="form-control w-100 mb-3" placeholder="Sacramento">
           <!-- search button-->
           <button type="submit" class="btn btn-primary w-100 mb-3">Search</button>
         </form>
@@ -41,7 +43,7 @@
           <!-- buttons with previous searches -->
         </div>
       </div>
-      <div id="results" class="col-12 col-md-9">
+      <div class="col-12 col-md-9">
         <!-- today's forcast -->
         <!-- 5 day forecast -->
       </div>
@@ -54,7 +56,7 @@
   <!-- Bootstrap Script -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <!-- JQuery Scripts -->
-  <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <!-- My Script -->
   <script src="./assets/js/script.js"></script>

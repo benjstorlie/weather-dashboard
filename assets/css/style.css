@@ -1,8 +1,11 @@
-.icon {
-  color: #ffed3b;
-  
+.heading {
+  color: var(--bs-white);
 }
 
-#header {
+.icon {
+  color: #ffed3b;
+}
+
+#header-box {
   background-color: #4a3bff;
 }
