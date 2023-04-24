@@ -98,6 +98,28 @@ function cityString(city) {
   }
 }
 
+function cropCityObject(city) {
+  // Shortens city data from geocoding to just lat, lon, city name, state, and country
+  return {
+    name: city.name,
+    state: city.state,
+    country: city.country,
+    lat: city.lat,
+    lon: city.lon,
+  }
+}
+
+function setCity(city) {
+  // store the city object into local storage with key "name, state, country" to avoid duplicates
+  // (next step: how to get desired order)
+  localStorage.setItem(cityString(city),JSON.stringify(city));
+}
+
+function getCity(cityString) {
+  // gets city object from storage from cityString key
+  return JSON.parse(localStorage.getItem(cityString));
+}
+
 function displayWeather() {
   if (queryString) {
     queryArray = queryString.slice(1).split("&");
