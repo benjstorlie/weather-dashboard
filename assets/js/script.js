@@ -42,12 +42,15 @@ function searchApiCity(city) {
       }
     }) 
     .then(function (data) {
-      
-      if (data.length === 1) {
+      if (data.length === 0) {
+        resultsEl.append(($("<h2>No data found. Try again!</h2>"));
+      } else if (data.length === 1) {
         // get weather for that city
         if (data[0].state) {
+          // Save to local storage
           window.location.href="./index.html?lat="+data[0].lat + "&lon=" +data[0].lon+"&cityName="+data[0].name+"&state="+data[0].state+"&country="+data[0].country;
         } else {
+          // Save to local storage
           window.location.href="./index.html?lat="+data[0].lat + "&lon=" +data[0].lon+"&cityName="+data[0].name+"&country="+data[0].country;
         }
       } else {
@@ -77,6 +80,7 @@ function displayCityList(data) {
     } else {
       var cityString = cityName + ", " + data[i].country;
       submitButton.click(function() {
+        // Save to local storage
         window.location.href="./index.html?lat="+cityLat + "&lon=" +cityLon+"&cityName="+cityName+"&country="+data[i].country;
       })
     }
