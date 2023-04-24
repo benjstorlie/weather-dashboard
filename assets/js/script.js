@@ -26,7 +26,7 @@ function handleCityFormSubmit(event) {
     return;
   }
 
-  window.location.href="./index.html?cityName="+cityInputVal;
+  window.location.href="./index.html?name="+cityInputVal;
 }
 
 function searchApiCity(city) {
@@ -43,16 +43,11 @@ function searchApiCity(city) {
     }) 
     .then(function (data) {
       if (data.length === 0) {
-        resultsEl.append(($("<h2>No data found. Try again!</h2>"));
+        resultsEl.append($("<h2>No data found. Try again!</h2>"));
       } else if (data.length === 1) {
+        // save to local storage
         // get weather for that city
-        if (data[0].state) {
-          // Save to local storage
-          window.location.href="./index.html?lat="+data[0].lat + "&lon=" +data[0].lon+"&cityName="+data[0].name+"&state="+data[0].state+"&country="+data[0].country;
-        } else {
-          // Save to local storage
-          window.location.href="./index.html?lat="+data[0].lat + "&lon=" +data[0].lon+"&cityName="+data[0].name+"&country="+data[0].country;
-        }
+        window.location.href=localCityURL(data[0]);
       } else {
         // Display list of possible cities
         displayCityList(data);
@@ -68,33 +63,38 @@ function displayCityList(data) {
     let cityDetails = $("<div>").addClass("col-12 col-md-6");
     let submitBox = $("<div>").addClass("col-12 col-md-6");
     let submitButton = $("<button>").addClass("btn btn-info").text("Get Weather");
-    let cityName = data[i].name;
-    let cityLat = data[i].lat;
-    let cityLon = data[i].lon;
-
-    if (data[i].state) {
-      var cityString = cityName + ", " + data[i].state + ", " + data[i].country;
-      submitButton.click(function() {
-        window.location.href="./index.html?lat="+cityLat + "&lon=" +cityLon+"&cityName="+cityName+"&state="+data[i].state+"&country="+data[i].country;;
-      })
-    } else {
-      var cityString = cityName + ", " + data[i].country;
-      submitButton.click(function() {
-        // Save to local storage
-        window.location.href="./index.html?lat="+cityLat + "&lon=" +cityLon+"&cityName="+cityName+"&country="+data[i].country;
-      })
-    }
+    let city = data[i];
+    submitButton.click(function() {
+      // save to local storage
+      window.location.href=localCityURL(city);
+    });
     console.log(cityString);
 
-    cityDetails.append($("<p>").text(cityString));
-    cityDetails.append($("<p>").text("Lat: "+cityLat));
-    cityDetails.append($("<p>").text("Lon: "+cityLon));
+    cityDetails.append($("<p>").text(cityString(city)));
+    cityDetails.append($("<p>").text("Lat: "+city.lat));
+    cityDetails.append($("<p>").text("Lon: "+city.lon));
 
     
 
     submitBox.append(submitButton);
     resultsEl.append(cityBox.append(cityDetails).append(submitBox));
 
+  }
+}
+
+function localCityURL(city) {
+  if (city.state) {
+    return "./index.html?lat="+city.lat + "&lon=" +city.lon+"&name="+city.name+"&state="+city.state+"&country="+city.country;
+  } else {
+    return "./index.html?lat="+city.lat + "&lon=" +city.lon+"&name="+city.name+"&country="+city.country;
+  }
+}
+
+function cityString(city) {
+  if (city.state) {
+    return city.name + ", " + city.state + ", " + city.country;
+  } else {
+    return city.name + ", " + city.country;
   }
 }
 
@@ -108,18 +108,13 @@ function displayWeather() {
     }
     console.log(locationData);
     if (locationData.lat&&locationData.lon) {
-      let cityString = locationData.cityName + ', ';
-      if (locationData.state) {
-        cityString += locationData.state + ', ';
-      }
-      cityString += locationData.country;
 
-      resultsEl.append($('<div>').addClass('today-card container-fluid border').append($('<h2>').addClass('today-heading').text(cityString)));
+      resultsEl.append($('<div>').addClass('today-card container-fluid border').append($('<h2>').addClass('today-heading').text(cityString(locationData))));
 
 
       searchApiWeather("https://api.openweathermap.org/data/2.5/forecast?lat="+locationData.lat+"&lon="+locationData.lon+"&appid="+apiKey+"&units=imperial");
-    } else if (locationData.cityName) {
-      searchApiCity(locationData.cityName);
+    } else if (locationData.name) {
+      searchApiCity(locationData.name);
     } else {
       resultsEl.append($("<h2>404 Not found. Try again!</h2>"));
     }
