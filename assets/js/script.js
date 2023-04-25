@@ -5,6 +5,7 @@ apiKey = '7ac95e30dbc3281b9f2843ec9f3e8192';
 
 const cityInputEl = $('#city-input');
 const cityInputFormEl = $('#city-input-form');
+const previousSearchButtonsEl=$('#previous-search-buttons');
 const resultsEl = $('#results');
 const queryString=document.location.search;
 
@@ -13,6 +14,7 @@ init();
 function init() {
   displayIcon()
   cityInputFormEl.submit(handleCityFormSubmit);
+  previousSearchButtons('btn btn-secondary w-100 mb-3');
   displayWeather();
 }
 
@@ -27,6 +29,27 @@ function handleCityFormSubmit(event) {
   }
 
   window.location.href="./index.html?name="+cityInputVal;
+}
+
+function previousSearchButtons(cssClass='btn') {
+  // Display and set event handlers for the buttons with previous city searches
+
+  // At the moment, they are not in any particular order
+
+  for (str in localStorage) {
+    // This doesn't exactly filter for items in local storage that are the ones added from this page, but it filters some.
+    if (str.includes(",")) {
+      var city = getCity(str);
+      if (city.name) {
+        let newButton = $('<button>').addClass(cssClass)
+          .text(str);
+        newButton.click(function() {
+          window.location.href=localCityURL(city);
+        });
+        previousSearchButtonsEl.append(newButton);
+      }
+    }
+  }
 }
 
 function searchApiCity(city) {
@@ -46,6 +69,7 @@ function searchApiCity(city) {
         resultsEl.append($("<h2>No data found. Try again!</h2>"));
       } else if (data.length === 1) {
         // save to local storage
+        setCity(data[0]);
         // get weather for that city
         window.location.href=localCityURL(data[0]);
       } else {
@@ -63,12 +87,12 @@ function displayCityList(data) {
     let cityDetails = $("<div>").addClass("col-12 col-md-6");
     let submitBox = $("<div>").addClass("col-12 col-md-6");
     let submitButton = $("<button>").addClass("btn btn-info").text("Get Weather");
-    let city = data[i];
+    let city = cropCityObject(data[i]);
     submitButton.click(function() {
       // save to local storage
+      setCity(city);
       window.location.href=localCityURL(city);
     });
-    console.log(cityString);
 
     cityDetails.append($("<p>").text(cityString(city)));
     cityDetails.append($("<p>").text("Lat: "+city.lat));
@@ -167,22 +191,19 @@ function displayIcon() {
 function displayWeatherData(data) {
   // Uses the data from the weather api to fill in the rest of the forecast
   console.log(data);
-
+  displayTodaysWeather(data.list[0]);
+  for (i=7;i<40;i+=8) {
+    displayForecastDay(data.list[i]);
+  }
 }
 
 function displayTodaysWeather(dataTimestamp) {
   // Fill in the card for the current weather, given that the location text is already in the heading
   // Data timestamp is just one of the objects in the array data.list recieved from openweathermap
 
-  $(".today-heading").append($("<span>").text(dataTimestamp.dt_text));
-
   let todayCard = $(".today-card");
-  todayCard.append($("<div>").addClass("today-weather-detail")
-    .text("Temperature: "+dataTimestamp.main.temp+"deg F"));
-  todayCard.append($("<div>").addClass("today-weather-detail")
-    .text("Wind: "+dataTimestamp.wind.speed+"MPH"));
-  todayCard.append($("<div>").addClass("today-weather-detail")
-    .text("Humidity: "+dataTimestamp.main.humidity+"%"));
+  appendWeatherDetails(todayCard,dataTimestamp);
+
 }
 
 function displayForecastDay(dataTimestamp) {
@@ -190,14 +211,29 @@ function displayForecastDay(dataTimestamp) {
   // Data timestamp is just one of the objects in the array data.list recieved from openweathermap
 
   let forecastCard=$("<div>").addClass("forecast-card");
-  // Add Heading
-  forecastCard.append($("<div>").addClass("forecast-card-heading h3")
-    .text(dataTimeStamp.dt_text));
-  forecastCard.append($("<div>").addClass("forecast-weather-detail")
-    .text("Temperature: "+dataTimestamp.main.temp+"deg F"));
-  forecastCard.append($("<div>").addClass("forecast-weather-detail")
-    .text("Wind: "+dataTimestamp.wind.speed+"MPH"));
-  forecastCard.append($("<div>").addClass("forecast-weather-detail")
+  appendWeatherDetails(forecastCard,dataTimestamp);
+  resultsEl.append(forecastCard);
+}
+
+function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
+  // appends to a JQuery HTML Object <div>s containing weather data for the particular timestamp
+
+  // If there is already a heading object
+
+  if (JQueryHTMLObject.children().length) {
+    console.log("True, "+dataTimestamp.dt_txt);
+    JQueryHTMLObject.children().append($("<span>")
+      .text(" ("+dataTimestamp.dt_txt+")"));
+  } else {
+    console.log("False, "+dataTimestamp.dt_txt);
+    JQueryHTMLObject.append($("<div>")
+      .text(dataTimestamp.dt_txt));
+  }
+  JQueryHTMLObject.append($("<div>")
+    .text("Temperature: "+dataTimestamp.main.temp+"°F"));
+  JQueryHTMLObject.append($("<div>")
+    .text("Wind: "+dataTimestamp.wind.speed+" MPH"));
+  JQueryHTMLObject.append($("<div>")
     .text("Humidity: "+dataTimestamp.main.humidity+"%"));
 }
 
