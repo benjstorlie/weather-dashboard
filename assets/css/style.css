@@ -2,10 +2,25 @@
   color: var(--bs-white);
 }
 
-.icon {
+#header-box a {
+  text-decoration: none;
+}
+
+.logo {
   color: #ffed3b;
 }
 
 #header-box {
   background-color: #4a3bff;
 }
+
+/* These two are for the icons retrieved from openweathermap */
+.today-card .weather-icon {
+  width: 30px;
+}
+
+.forecast-card .weather-icon {
+  width: 20px
+}
+
+

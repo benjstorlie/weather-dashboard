@@ -12,7 +12,7 @@ const queryString=document.location.search;
 init();
 
 function init() {
-  displayIcon()
+  displayLogo()
   cityInputFormEl.submit(handleCityFormSubmit);
   previousSearchButtons('btn btn-secondary w-100 mb-3');
   displayWeather();
@@ -183,9 +183,9 @@ function searchApiWeather(weatherURL) {
     }); 
 }
 
-function displayIcon() {
-  // Set the size of the Weather Icon in the header to the font-size of the header
-  $(".icon").append($("<img id='weather-icon' src='./assets/images/favicon/weather-transparent-favicon-16x16.svg'>").css("width",$("h1").css("line-height")));
+function displayLogo() {
+  // Set the size of the Weather Logo in the header to the font-size of the header
+  $(".logo").append($("<img src='./assets/images/favicon/weather-transparent-favicon-16x16.svg'>").css("width",$("h1").css("line-height")));
 }
 
 function displayWeatherData(data) {
@@ -219,22 +219,33 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
   // appends to a JQuery HTML Object <div>s containing weather data for the particular timestamp
 
   // If there is already a heading object
-
   if (JQueryHTMLObject.children().length) {
-    console.log("True, "+dataTimestamp.dt_txt);
     JQueryHTMLObject.children().append($("<span>")
       .text(" ("+dataTimestamp.dt_txt+")"));
   } else {
-    console.log("False, "+dataTimestamp.dt_txt);
-    JQueryHTMLObject.append($("<div>")
-      .text(dataTimestamp.dt_txt));
+    JQueryHTMLObject.append(
+      $("<div>")
+      .text(dataTimestamp.dt_txt)
+    );
   }
-  JQueryHTMLObject.append($("<div>")
-    .text("Temperature: "+dataTimestamp.main.temp+"°F"));
-  JQueryHTMLObject.append($("<div>")
-    .text("Wind: "+dataTimestamp.wind.speed+" MPH"));
-  JQueryHTMLObject.append($("<div>")
-    .text("Humidity: "+dataTimestamp.main.humidity+"%"));
+  JQueryHTMLObject.append(
+    $("<img>")
+    .addClass("weather-icon")
+    .attr("src","https://openweathermap.org/img/wn/"+dataTimestamp.weather[0].icon+"@2x.png")
+    .attr("alt",dataTimestamp.weather[0].description)
+  );
+  JQueryHTMLObject.append(
+    $("<div>")
+    .text("Temperature: "+dataTimestamp.main.temp+"°F")
+  );
+  JQueryHTMLObject.append(
+    $("<div>")
+    .text("Wind: "+dataTimestamp.wind.speed+" MPH")
+  );
+  JQueryHTMLObject.append(
+    $("<div>")
+    .text("Humidity: "+dataTimestamp.main.humidity+"%")
+  );
 }
 
 // I'd like to first sort the data by date, so I can get the high and low temps for a day, for example
