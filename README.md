@@ -28,8 +28,8 @@ THEN I am again presented with current and future conditions for that city
 
 1. I now understand that local storage is for the whole browser and not just single websites or webpages, since I found data from my previous projects in there.  I wonder if there is a standard or preferred way to mark which data came from your site, to make retrieval easier and to not overwrite something else by accident.
 
-1. Currently, the JavaScript file creates whole new elements.  I think I would like to restructure it so that more is set up in the HTML.  Not-in-use containers would be set to `display: none`, and the JavaScript file would then fill in with text the empty elements.  I think that would make styling much easier, since I'm doing most of it by adding Bootstrap classes.
+1. Currently, the JavaScript file creates whole new elements.  I think I would like to restructure it so that more is set up in the HTML.  Not-in-use containers would be set to `display: none`, and the JavaScript file would then fill in with text the empty elements.  I think that would make styling much easier to read and edit, since I'm doing most of it by adding Bootstrap classes.
 
 2. I would like you to also be able to enter a zip code in addition to a city name.  I would have it see if your input is formatted like a zip code, and then use that function of the Geocoding API.
 
-3. The Geocoding API returns these two-character country codes, and it would really be nice to turn that back into the name of the country.
+3. The Geocoding API returns these two-character country codes.  I did some fiddling to turn a table of these codes into an object to look up country names by their codes.  Unfortunately, that table was optimized for sorting alphabetically by name, so "(the)" is always put at the end if that's how the country name starts.  It definitely looks a little funny.  The list is short enough that I could go edit it to change the country names into a preferred format.

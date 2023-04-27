@@ -14,13 +14,35 @@
   background-color: #4a3bff;
 }
 
-/* These two are for the icons retrieved from openweathermap */
+.card-heading {
+  background-color: #3b8eff;
+  color: white;
+  padding: 3px;
+}
+
+#submit {
+  border-bottom-left-radius: 0;
+}
+
+#clearSearches {
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+}
+
+.today-card, .forecast-card {
+  border-color: #3b8eff;
+  border-width: 2px;
+  border-style: solid;
+}
+
+
+/* These two are for the icons retrieved from openweathermap 
 .today-card .weather-icon {
   width: 30px;
 }
 
 .forecast-card .weather-icon {
   width: 20px
-}
+}*/
 
 

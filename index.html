@@ -33,15 +33,23 @@
           <!--<input>-->
           <input type="text" id="city-input" class="form-control w-100 mb-3" placeholder="Sacramento" value="Sacramento">
           <!-- search button-->
-          <button type="submit" class="btn btn-primary w-100 mb-3">Search</button>
+          <button id="submit" type="submit" class="btn btn-primary w-100">Search</button>
         </form>
+        <button id="clearSearches" class="btn btn-warning w-50 mb-3">Clear search history</button>
         <div id="previous-search-buttons">
           <!-- buttons with previous searches -->
         </div>
       </div>
-      <div id="results" class="col-12 col-md-9">
-        <!-- today's forcast -->
-        <!-- 5 day forecast -->
+      <div id="results" class="col-12 col-md-9 container">
+        <div id="forecast" class="w-100 row g-2" >
+          <div class="col-12">
+          <div id="today" class ='today-card d-none' >
+            <!-- today's forecast -->
+          </div></div>
+          <!-- 5 day forecast -->
+        </div>
+          
+        </div>
       </div>
     </div>
   </main>

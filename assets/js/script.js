@@ -5,8 +5,11 @@ apiKey = '7ac95e30dbc3281b9f2843ec9f3e8192';
 
 const cityInputEl = $('#city-input');
 const cityInputFormEl = $('#city-input-form');
+const clearSearchesBtn = $('#clearSearches');
 const previousSearchButtonsEl=$('#previous-search-buttons');
 const resultsEl = $('#results');
+const todayEl = $('#today');
+const forecastEl = $('#forecast');
 const queryString=document.location.search;
 
 init();
@@ -33,6 +36,7 @@ function handleCityFormSubmit(event) {
 
 function previousSearchButtons(cssClass='btn') {
   // Display and set event handlers for the buttons with previous city searches
+  // Also add Clear Search History Button
 
   // At the moment, they are not in any particular order
 
@@ -50,7 +54,15 @@ function previousSearchButtons(cssClass='btn') {
       }
     }
   }
+
+  clearSearchesBtn.click(function() {
+    previousSearchButtonsEl.empty();
+    localStorage.clear();
+  })
+
 }
+
+
 
 function searchApiCity(city) {
   let cityURL = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + apiKey;
@@ -155,7 +167,7 @@ function displayWeather() {
     console.log(locationData);
     if (locationData.lat&&locationData.lon) {
 
-      resultsEl.append($('<div>').addClass('today-card container-fluid border').append($('<h2>').addClass('today-heading').text(cityString(locationData))));
+      todayEl.append($('<h2>').addClass('today-heading card-heading col-12').text(cityString(locationData)));
 
 
       searchApiWeather("https://api.openweathermap.org/data/2.5/forecast?lat="+locationData.lat+"&lon="+locationData.lon+"&appid="+apiKey+"&units=imperial");
@@ -200,9 +212,8 @@ function displayWeatherData(data) {
 function displayTodaysWeather(dataTimestamp) {
   // Fill in the card for the current weather, given that the location text is already in the heading
   // Data timestamp is just one of the objects in the array data.list recieved from openweathermap
-
-  let todayCard = $(".today-card");
-  appendWeatherDetails(todayCard,dataTimestamp);
+  todayEl.removeClass("d-none");
+  appendWeatherDetails(todayEl,dataTimestamp);
 
 }
 
@@ -211,8 +222,9 @@ function displayForecastDay(dataTimestamp) {
   // Data timestamp is just one of the objects in the array data.list recieved from openweathermap
 
   let forecastCard=$("<div>").addClass("forecast-card");
+  let forecastCol=$("<div>").addClass("col-6 col-md-4 col-lg-auto");
   appendWeatherDetails(forecastCard,dataTimestamp);
-  resultsEl.append(forecastCard);
+  forecastEl.append(forecastCol.append(forecastCard));
 }
 
 function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
@@ -224,28 +236,35 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
       .text(" ("+formatDate(dataTimestamp.dt)+")"));
   } else {
     JQueryHTMLObject.append(
-      $("<div>")
+      $("<div>").addClass("card-heading")
       .text(formatDate(dataTimestamp.dt))
     );
   }
-  JQueryHTMLObject.append(
+
+  const content=$("<div>").addClass("p-1 row");
+  content.append($("<div>").addClass("col-3 align-self-center")
+  .append(
     $("<img>")
-    .addClass("weather-icon")
+    .addClass("weather-icon img-fluid mx-auto")
     .attr("src","https://openweathermap.org/img/wn/"+dataTimestamp.weather[0].icon+"@2x.png")
     .attr("alt",dataTimestamp.weather[0].description)
+  ));
+
+  content.append($("<div>").addClass("col-9")
+    .append(
+      $("<div>")
+      .text("Temperature: "+dataTimestamp.main.temp+"°F")
+    )
+    .append(
+      $("<div>")
+      .text("Wind: "+dataTimestamp.wind.speed+" MPH")
+    )
+    .append(
+      $("<div>")
+      .text("Humidity: "+dataTimestamp.main.humidity+"%")
+    )
   );
-  JQueryHTMLObject.append(
-    $("<div>")
-    .text("Temperature: "+dataTimestamp.main.temp+"°F")
-  );
-  JQueryHTMLObject.append(
-    $("<div>")
-    .text("Wind: "+dataTimestamp.wind.speed+" MPH")
-  );
-  JQueryHTMLObject.append(
-    $("<div>")
-    .text("Humidity: "+dataTimestamp.main.humidity+"%")
-  );
+  JQueryHTMLObject.append(content);
 }
 
 function formatDate(dt) {
