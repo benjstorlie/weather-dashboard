@@ -31,3 +31,5 @@ THEN I am again presented with current and future conditions for that city
 1. Currently, the JavaScript file creates whole new elements.  I think I would like to restructure it so that more is set up in the HTML.  Not-in-use containers would be set to `display: none`, and the JavaScript file would then fill in with text the empty elements.  I think that would make styling much easier, since I'm doing most of it by adding Bootstrap classes.
 
 2. I would like you to also be able to enter a zip code in addition to a city name.  I would have it see if your input is formatted like a zip code, and then use that function of the Geocoding API.
+
+3. The Geocoding API returns these two-character country codes, and it would really be nice to turn that back into the name of the country.
