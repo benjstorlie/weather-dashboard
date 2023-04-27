@@ -221,11 +221,11 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
   // If there is already a heading object
   if (JQueryHTMLObject.children().length) {
     JQueryHTMLObject.children().append($("<span>")
-      .text(" ("+dataTimestamp.dt_txt+")"));
+      .text(" ("+formatDate(dataTimestamp.dt)+")"));
   } else {
     JQueryHTMLObject.append(
       $("<div>")
-      .text(dataTimestamp.dt_txt)
+      .text(formatDate(dataTimestamp.dt))
     );
   }
   JQueryHTMLObject.append(
@@ -246,6 +246,23 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
     $("<div>")
     .text("Humidity: "+dataTimestamp.main.humidity+"%")
   );
+}
+
+function formatDate(dt) {
+  // dt is the date in Unix, retrieved from open weather map
+  return dayjs.unix(dt).format('M/D/YYYY');
+}
+
+function dayOfTheWeek(dt) {
+  // dt is the date in Unix, retrieved from open weather map
+  // return an object with different formats for the day of the week
+  let dayjsObject = dayjs(dt);
+  let day = {};
+  let dayFormats = ['d','dd','ddd','dddd'];
+  for (i=0;i<dayFormats.length;i++) {
+    day[dayFormats[i]] = dayjsObject.format(dayFormats[i]);
+  }
+  return day;
 }
 
 // I'd like to first sort the data by date, so I can get the high and low temps for a day, for example
