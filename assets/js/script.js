@@ -69,7 +69,7 @@ function previousSearchButtons(cssClass='btn') {
 
 
 function searchApiCity(city) {
-  let cityURL = "http://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + apiKey;
+  let cityURL = "https://api.openweathermap.org/geo/1.0/direct?q=" + city + "&limit=5&appid=" + apiKey;
 
   fetch(cityURL)
     .then(function(response) {
