@@ -1,9 +1,16 @@
-.heading {
-  color: var(--bs-white);
+:root {
+  --card-color: #0297a6;
+  --sky-blue: #a9cbfe;
 }
+
+/*
+body {
+   background-color: var(--sky-blue); 
+}*/
 
 #header-box a {
   text-decoration: none;
+  color: var(--bs-white);
 }
 
 .logo {
@@ -14,10 +21,9 @@
   background-color: #4a3bff;
 }
 
-.card-heading {
-  background-color: #3b8eff;
-  color: white;
-  padding: 3px;
+#clearSearches {
+  min-width: 50%;
+  max-width: 75%;
 }
 
 #submit {
@@ -29,20 +35,63 @@
   border-top-left-radius: 0;
 }
 
-.today-card, .forecast-card {
-  border-color: #3b8eff;
-  border-width: 2px;
+#forecast .card {
+  border:0;
+  border-radius: 0;
+  background-color: var(--sky-blue);
+}
+
+#today {
+  font-size: 1.2rem;
+}
+
+#forecast .card-heading {
+  font-size: 1.2em;
+  background-color: var(--card-color);
+  color: white;
+  padding-top: .5em;
+  margin-bottom: 0;
+  line-height:1em;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#today .card-heading {
+  font-size: 1.5em;
+  font-weight: 500;
+}
+
+.card-heading>div {
+  margin-left: .5em;
+  margin-bottom: .5em;
+  min-width: fit-content;
+}
+
+#forecast .card-body {
+  border-color: var(--card-color);
   border-style: solid;
+  border-width: 3px;
 }
 
-
-/* These two are for the icons retrieved from openweathermap 
-.today-card .weather-icon {
-  width: 30px;
+.details-column {
+  background-color: #ffffffaa;
+  border-width: 0;
+  min-width: 9em;
+  padding: .5em;
 }
 
-.forecast-card .weather-icon {
-  width: 20px
-}*/
+.icon-column {
+  padding-left: 0;
+  padding-right: 0;
+  min-width: fit-content;
+}
+
+.weather-icon {
+  width: 5rem;
+}
+
+#today .weather-icon {
+  width: 9rem;
+}
 
 

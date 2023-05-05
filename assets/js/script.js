@@ -7,10 +7,10 @@ const cityInputEl = $('#city-input');
 const cityInputFormEl = $('#city-input-form');
 const clearSearchesBtn = $('#clearSearches');
 const previousSearchButtonsEl=$('#previous-search-buttons');
-const resultsEl = $('#results');
+const resultsEl = $('#search-results');
 const todayEl = $('#today');
 const forecastEl = $('#forecast');
-const queryString=document.location.search;
+const queryString=decodeURIComponent(document.location.search);
 
 init();
 
@@ -41,14 +41,18 @@ function previousSearchButtons(cssClass='btn') {
   // At the moment, they are not in any particular order
 
   for (str in localStorage) {
-    // This doesn't exactly filter for items in local storage that are the ones added from this page, but it filters some.
+    // This doesn't exactly filter for items in local storage that are the ones added from this website, but it filters some.
     if (str.includes(",")) {
       var city = getCity(str);
+
       if (city.name) {
         let newButton = $('<button>').addClass(cssClass)
           .text(str);
-        newButton.click(function() {
-          window.location.href=localCityURL(city);
+        newButton.click(function(event) {
+          //console.log($(event.target).text());
+          console.log(localCityURL(getCity($(event.target).text())));
+          //window.location.assign(localCityURL($(event.target).text()));
+
         });
         previousSearchButtonsEl.append(newButton);
       }
@@ -95,10 +99,12 @@ function searchApiCity(city) {
 function displayCityList(data) {
   // Display list of up to 5 possible cities to then search weather for
   for (let i=0; i<data.length; i++) {
-    let cityBox = $("<div>").addClass("row border border-info p-2 m-3");
-    let cityDetails = $("<div>").addClass("col-12 col-md-6");
-    let submitBox = $("<div>").addClass("col-12 col-md-6");
-    let submitButton = $("<button>").addClass("btn btn-info").text("Get Weather");
+    let cityBox = $("<div>").addClass("d-flex w-75 border border-2 border-info p-3 mx-auto my-2 align-items-center");
+    let cityDetails = $("<div>").addClass("flex-grow-1");
+    let submitBox = $("<div>").addClass("flex-grow-0")
+    .css("width","fit-content");
+    //.css("flex-basis","11rem");
+    let submitButton = $("<button>").addClass("btn btn-info fs-5 w-100 py-3 text-nowrap").text("Get Weather");
     let city = cropCityObject(data[i]);
     submitButton.click(function() {
       // save to local storage
@@ -106,11 +112,10 @@ function displayCityList(data) {
       window.location.href=localCityURL(city);
     });
 
-    cityDetails.append($("<p>").text(cityString(city)));
-    cityDetails.append($("<p>").text("Lat: "+city.lat));
-    cityDetails.append($("<p>").text("Lon: "+city.lon));
-
-    
+    cityDetails.append(`
+    <h4>${cityString(city)}</h4>
+    <p class='mb-0'>Lat: ${city.lat} <br/> Lon: ${city.lon}</p>
+    `);
 
     submitBox.append(submitButton);
     resultsEl.append(cityBox.append(cityDetails).append(submitBox));
@@ -128,7 +133,11 @@ function localCityURL(city) {
 
 function cityString(city) {
   if (city.state) {
-    return city.name + ", " + city.state + ", " + countryCodes[city.country];
+    if (city.country == 'US') {
+      return city.name + ", " + stateCodesUS[city.state];
+    } else {
+      return city.name + ", " + city.state + ", " + countryCodes[city.country];
+    }
   } else {
     return city.name + ", " + countryCodes[city.country];
   }
@@ -167,8 +176,8 @@ function displayWeather() {
     console.log(locationData);
     if (locationData.lat&&locationData.lon) {
 
-      todayEl.append($('<h2>').addClass('today-heading card-heading col-12').text(cityString(locationData)));
-
+      todayEl.append($("<div>").addClass("card-heading").append($("<div>")
+      .text(cityString(locationData))));
 
       searchApiWeather("https://api.openweathermap.org/data/2.5/forecast?lat="+locationData.lat+"&lon="+locationData.lon+"&appid="+apiKey+"&units=imperial");
     } else if (locationData.name) {
@@ -215,16 +224,21 @@ function displayTodaysWeather(dataTimestamp) {
   todayEl.removeClass("d-none");
   appendWeatherDetails(todayEl,dataTimestamp);
 
+  
+
 }
 
 function displayForecastDay(dataTimestamp) {
   // Add a card into the forecast box containing weather for the given timestamp
   // Data timestamp is just one of the objects in the array data.list recieved from openweathermap
 
-  let forecastCard=$("<div>").addClass("forecast-card");
-  let forecastCol=$("<div>").addClass("col-6 col-md-4 col-lg-auto");
+  let forecastCard=$("<div>").addClass("forecast-card card h-100");
+  let forecastCol=$("<div>").addClass("col-6 col-md-4 col-xl");
   appendWeatherDetails(forecastCard,dataTimestamp);
   forecastEl.append(forecastCol.append(forecastCard));
+
+  adjustWeatherDetailsWidths();
+
 }
 
 function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
@@ -232,17 +246,16 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
 
   // If there is already a heading object
   if (JQueryHTMLObject.children().length) {
-    JQueryHTMLObject.children().append($("<span>")
-      .text(" ("+formatDate(dataTimestamp.dt)+")"));
+    JQueryHTMLObject.children().append($("<div>").text(formatDate(dataTimestamp.dt)));
   } else {
     JQueryHTMLObject.append(
-      $("<div>").addClass("card-heading")
-      .text(formatDate(dataTimestamp.dt))
+      $("<div>").addClass("card-heading").append($("<div>")
+      .text(formatDate(dataTimestamp.dt)))
     );
   }
 
-  const content=$("<div>").addClass("p-1 row");
-  content.append($("<div>").addClass("col-3 align-self-center")
+  const content=$("<div>").addClass("g-0 row card-body p-0");
+  content.append($("<div>").addClass("icon-column align-self-center")
   .append(
     $("<img>")
     .addClass("weather-icon img-fluid mx-auto")
@@ -250,7 +263,7 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
     .attr("alt",dataTimestamp.weather[0].description)
   ));
 
-  content.append($("<div>").addClass("col-9")
+  content.append($("<div>").addClass("details-column col")
     .append(
       $("<div>")
       .text("Temperature: "+dataTimestamp.main.temp+"°F")
@@ -282,6 +295,13 @@ function dayOfTheWeek(dt) {
     day[dayFormats[i]] = dayjsObject.format(dayFormats[i]);
   }
   return day;
+}
+
+function adjustWeatherDetailsWidths() {
+
+  $("#today .icon-column").addClass("col-12 col-sm-4");
+  $(".forecast-card .icon-column").addClass("col");
+
 }
 
 // I'd like to first sort the data by date, so I can get the high and low temps for a day, for example

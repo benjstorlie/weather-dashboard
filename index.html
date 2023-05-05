@@ -19,7 +19,7 @@
 <body>
   <header id="header-box" class="container-fluid py-3 text-center font-weight-bold">
     <div class="row justify-content-end"><div class="col-12 col-md-9">
-      <a href="./index.html"><h1 class="heading">
+      <a href="./index.html"><h1>
         <span class="logo"></span>
          Weather Dashboard
       </h1></a>
@@ -35,15 +35,18 @@
           <!-- search button-->
           <button id="submit" type="submit" class="btn btn-primary w-100">Search</button>
         </form>
-        <button id="clearSearches" class="btn btn-warning w-50 mb-3">Clear search history</button>
+        <button id="clearSearches" class="btn btn-warning mb-3">Clear search history</button>
         <div id="previous-search-buttons">
           <!-- buttons with previous searches -->
         </div>
       </div>
       <div id="results" class="col-12 col-md-9 container">
+        <div id="search-results" class="w-100" >
+
+        </div>
         <div id="forecast" class="w-100 row g-2" >
           <div class="col-12">
-          <div id="today" class ='today-card d-none' >
+          <div id="today" class ='card d-none' >
             <!-- today's forecast -->
           </div></div>
           <!-- 5 day forecast -->
