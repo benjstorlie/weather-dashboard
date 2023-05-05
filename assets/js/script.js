@@ -134,7 +134,7 @@ function localCityURL(city) {
 function cityString(city) {
   if (city.state) {
     if (city.country == 'US') {
-      return city.name + ", " + stateCodesUS[city.state];
+      return city.name + ", " + stateCodesUS[city.state] + ", US" ;
     } else {
       return city.name + ", " + city.state + ", " + countryCodes[city.country];
     }
