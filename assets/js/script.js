@@ -49,9 +49,9 @@ function previousSearchButtons(cssClass='btn') {
         let newButton = $('<button>').addClass(cssClass)
           .text(str);
         newButton.click(function(event) {
-          //console.log($(event.target).text());
-          console.log(localCityURL(getCity($(event.target).text())));
-          //window.location.assign(localCityURL($(event.target).text()));
+          let newURL=localCityURL(getCity($(event.target).text()));
+          window.location.assign(newURL);
+         // window.location.assign(localCityURL(city));
 
         });
         previousSearchButtonsEl.append(newButton);
