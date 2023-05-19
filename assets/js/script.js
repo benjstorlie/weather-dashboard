@@ -270,6 +270,10 @@ function appendWeatherDetails(JQueryHTMLObject,dataTimestamp) {
   ));
 
   content.append($("<div>").addClass("details-column col")
+  .append(
+      $("<div>").addClass('weather-description')
+      .text(dataTimestamp.weather[0].description)
+    )
     .append(
       $("<div>")
       .text("Temperature: "+dataTimestamp.main.temp+"°F")

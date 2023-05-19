@@ -94,4 +94,6 @@ body {
   width: 9rem;
 }
 
-
+.weather-description {
+  font-size: 1.5em;
+}
