@@ -82,7 +82,13 @@ function searchApiCity(city) {
     }) 
     .then(function (data) {
       if (data.length === 0) {
-        resultsEl.append($("<h2>No data found. Try again!</h2>"));
+        resultsEl.append($(`
+        <h2>No data found. Try again!</h2>
+        <ul>
+          <li>Make sure the name of your city is spelled correctly.</li>
+          <li>Only include the city name — not the state or country.</li>
+        </ul>
+        `));
       } else if (data.length === 1) {
         // save to local storage
         setCity(data[0]);
