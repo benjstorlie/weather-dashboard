@@ -34,4 +34,6 @@ THEN I am again presented with current and future conditions for that city
 
 2. I would like you to also be able to enter a zip code in addition to a city name.  I would have it see if your input is formatted like a zip code, and then use that function of the Geocoding API.
 
-3. The Geocoding API returns these two-character country codes.  I did some fiddling to turn a table of these codes into an object to look up country names by their codes.  Unfortunately, that table was optimized for sorting alphabetically by name, so "(the)" is always put at the end if that's how the country name starts.  It definitely looks a little funny.  The list is short enough that I could go edit it to change the country names into a preferred format.
+3. The Geocoding API returns these two-character country codes.  I did some fiddling to turn a table of these codes into an object to look up country names by their codes. Similarly, it returns the whole state name instead of the two-character code, which looks clunky.  So I made another list to clean up how the location is formatted.
+
+4. My mother uses this app called Drive Weather to plan out road trips.  It seems like it wouldn't be too much of a change to have the user input different cities and dates to show how the weather will change on your trip.
